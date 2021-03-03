@@ -13,21 +13,29 @@ json.dump(fire_data, outfile, indent=4)
 
 lons, lats, brights = [], [], []
 
-list_of_fires = fire_data
 
+relevant_fires = []
 
 index = 0
 
-while index < len(list_of_fires):
-    for f in list_of_fires:
-        if list_of_fires[index]['brightness'] > 450:
-            lon = f['longitude']
-            lat = f['latitude']
-            bri = f['brightness']
-            lons.append(lon)
-            lats.append(lat)
-            brights.append(bri)
-    index += 1
+while index < len(fire_data):
+    for f in fire_data:
+        if fire_data[index]['brightness'] > 450:
+            relevant_fires.append(fire_data[index])
+        index += 1
+
+
+
+for f in relevant_fires:
+    lon = f['longitude']
+    lat = f['latitude']
+    bri = f['brightness']
+    lons.append(lon)
+    lats.append(lat)
+    brights.append(bri)
+
+
+
 
 
 from plotly.graph_objs import Scattergeo, Layout
@@ -37,7 +45,7 @@ data = [{ 'type':'scattergeo',
 'lon':lons,
 'lat':lats,
 'marker':{
-    'size':[5*bright for bright in brights],
+    'size':[.05*bright for bright in brights],
     'color':brights,
     'colorscale':'Viridis',
     'reversescale':True,
